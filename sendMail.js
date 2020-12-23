@@ -1,4 +1,4 @@
-require('dotenv').config({path: __dirname + '/key.env'});
+require('dotenv').config(path.resolve( __dirname, '/key.env'));
 const nodemailer = require('nodemailer');
 const express = require('express');
 const cors = require('cors');
