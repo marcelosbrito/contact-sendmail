@@ -1,12 +1,12 @@
-require('dotenv').config(path.resolve( __dirname, '/key.env'));
+require('dotenv').config({path: __dirname + '/key.env'});
 const nodemailer = require('nodemailer');
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const functions = require('firebase-functions');
-const app = express();
-app.use(cors());
-app.use(bodyParser.json());
+const sendEmail = express();
+sendEmail.use(cors());
+sendEmail.use(bodyParser.json());
 
 // E-mail Account SETUP
 const transporter = nodemailer.createTransport({
@@ -26,7 +26,7 @@ const transporter = nodemailer.createTransport({
 });
 
 // verify connection configuration
-transporter.verify(function(error, success) {
+transporter.verify(function(error) {
   if (error) {
     console.log(error);
   } else {
@@ -35,12 +35,12 @@ transporter.verify(function(error, success) {
 });
 
 // verify APP connection
-app.get('/app', (req, res, next) => {
+sendEmail.get('/app', (req, res, next) => {
   res.send('APP RUNNING OK')
 })
 
 //Post Setup & sending contact form content
-app.post('/send', (req, res, next) => {
+sendEmail.post('/send', (req, res, next) => {
   const name = req.body.name
   const email = req.body.email
   const message = req.body.message
@@ -53,7 +53,7 @@ app.post('/send', (req, res, next) => {
 
   transporter.sendMail(mail, (err, data) => {
     if (err) {
-      console.log(err);
+      console.log(err, data);
       res.json({
         status: 'fail'
       })
@@ -64,4 +64,4 @@ app.post('/send', (req, res, next) => {
     }
   })
 })
-exports.app = functions.https.onRequest(app);
+exports.sendEmail = functions.https.onRequest(sendEmail);
