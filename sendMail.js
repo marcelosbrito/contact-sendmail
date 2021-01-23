@@ -3,7 +3,7 @@ const nodemailer = require('nodemailer');
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const functions = require('firebase-functions');
+//const functions = require('firebase-functions');
 const sendEmail = express();
 sendEmail.use(cors());
 sendEmail.use(bodyParser.json());
@@ -64,4 +64,5 @@ sendEmail.post('/send', (req, res, next) => {
     }
   })
 })
-exports.sendEmail = functions.https.onRequest(sendEmail);
+sendEmail.listen(3000);
+//exports.sendEmail = functions.https.onRequest(sendEmail);
