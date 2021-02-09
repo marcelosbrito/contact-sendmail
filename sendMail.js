@@ -6,6 +6,14 @@ const bodyParser = require('body-parser');
 //const functions = require('firebase-functions');
 const sendEmail = express();
 sendEmail.use(cors());
+
+// parse application/x-www-form-urlencoded
+sendEmail.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/text
+sendEmail.use(bodyParser.text())
+
+// parse application/json
 sendEmail.use(bodyParser.json());
 
 // E-mail Account SETUP
@@ -50,7 +58,7 @@ sendEmail.post('/send', (req, res, next) => {
     to: 'marcellus.brito@gmail.com', // receiver email
     text: content
   }
-
+  console.log(name, email, message, content)
   transporter.sendMail(mail, (err, data) => {
     if (err) {
       console.log(err, data);
